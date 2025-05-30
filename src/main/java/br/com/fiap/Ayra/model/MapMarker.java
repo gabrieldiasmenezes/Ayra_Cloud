@@ -19,6 +19,7 @@ public class MapMarker {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Lob
     @Column(name = "description", nullable = false)
     private String description;
 
