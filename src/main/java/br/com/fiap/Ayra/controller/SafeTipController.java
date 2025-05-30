@@ -33,6 +33,6 @@ public class SafeTipController {
     // GET /safe-tip/by-alert/{alertId}
     @GetMapping("/by-alert/{alertId}")
     public ResponseEntity<List<SafeTip>> getByAlert(@PathVariable Long alertId) {
-        return ResponseEntity.ok(repository.findByAlertIdAlert(alertId));
+        return ResponseEntity.ok(repository.findByAlertId(alertId));
     }
 }

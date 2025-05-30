@@ -32,6 +32,6 @@ public class SafeRoutesController {
     // GET /safe-routes/by-alert/{alertId} - Listar rotas seguras por alerta
     @GetMapping("/by-alert/{alertId}")
     public ResponseEntity<List<SafeRoutes>> getByAlert(@PathVariable Long alertId) {
-        return ResponseEntity.ok(repository.findByAlertIdAlert(alertId));
+        return ResponseEntity.ok(repository.findByAlertId(alertId));
     }
 }

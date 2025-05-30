@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import br.com.fiap.Ayra.model.SafeLocation;
 
 public interface SafeLocationRepository extends JpaRepository<SafeLocation, Long> {
-    List<SafeLocation> findByAlertIdAlert(Long alertId);
+    List<SafeLocation> findByAlertId(Long alertId);
 }
