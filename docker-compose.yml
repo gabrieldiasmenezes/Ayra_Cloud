@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    build:
+      context: ./db-postgres
+      dockerfile: Dockerfile
+    container_name: ayra-db
+    environment:
+      POSTGRES_USER: ayra_user
+      POSTGRES_PASSWORD: ayra_pass
+      POSTGRES_DB: ayra_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - ayranet
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ayra-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - ayranet
+
+volumes:
+  postgres_data:
+
+networks:
+  ayranet:
+    driver: bridge

@@ -44,51 +44,70 @@ public class UserController {
 
     // CREATE: Criar um novo usuário
     @PostMapping
-    @Operation(
-        summary = "Cria um novo usuário",
-        description = "Registra um novo usuário no sistema. Todos os campos obrigatórios devem ser fornecidos.",
-        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Dados do usuário a ser criado",
-            required = true,
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))
-        ),
-        responses = {
-            @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Erro de validação nos dados fornecidos",
-                content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "500", description = "Erro interno do servidor",
-                content = @Content(mediaType = "application/json"))
-        }
-    )
-    public ResponseEntity<UserResponse> createUser(@RequestBody User user) {
-        // Verifica e trata as coordenadas
-        Coordinates coordinates = user.getCoordinates();
-        if (coordinates != null) {
-            boolean exists = false;
-            if (coordinates.getId() != null) {
-                exists = coordinatesRepository.existsById(coordinates.getId());
-            } else {
-                exists = !coordinatesRepository
-                    .findByLatitudeBetweenAndLongitudeBetween(
-                        coordinates.getLatitude() - 0.0001,
-                        coordinates.getLatitude() + 0.0001,
-                        coordinates.getLongitude() - 0.0001,
-                        coordinates.getLongitude() + 0.0001)
-                    .isEmpty();
-            }
-
-            if (!exists) {
-                coordinates = coordinatesRepository.save(coordinates);
-            }
-
-            user.setCoordinates(coordinates);
-        }
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User savedUser = repository.save(user);
-        return ResponseEntity.status(201).body(new UserResponse(savedUser.getId(), savedUser.getName(), savedUser.getEmail()));
+@Operation(
+    summary = "Cria um novo usuário",
+    description = "Registra um novo usuário no sistema. Todos os campos obrigatórios devem ser fornecidos.",
+    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        description = "Dados do usuário a ser criado",
+        required = true,
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))
+    ),
+    responses = {
+        @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Erro de validação nos dados fornecidos",
+            content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor",
+            content = @Content(mediaType = "application/json"))
     }
+)
+public ResponseEntity<UserResponse> createUser(@RequestBody User user) {
+    Coordinates coordinates = user.getCoordinates();
+    
+    if (coordinates != null) {
+        boolean exists = false;
+
+        // Verifica se já existe pelo ID ou por proximidade geográfica
+        if (coordinates.getId() != null) {
+            exists = coordinatesRepository.existsById(coordinates.getId());
+        } else {
+            exists = !coordinatesRepository
+                .findByLatitudeBetweenAndLongitudeBetween(
+                    coordinates.getLatitude() - 0.0001,
+                    coordinates.getLatitude() + 0.0001,
+                    coordinates.getLongitude() - 0.0001,
+                    coordinates.getLongitude() + 0.0001)
+                .isEmpty();
+        }
+
+        // Se não existir, salva as coordenadas
+        if (!exists) {
+            coordinates = coordinatesRepository.save(coordinates); // Salva e obtém a instância persistida
+        } else {
+            // Se existir, busca a instância persistida no banco
+            coordinates = coordinatesRepository
+                .findByLatitudeBetweenAndLongitudeBetween(
+                    coordinates.getLatitude() - 0.0001,
+                    coordinates.getLatitude() + 0.0001,
+                    coordinates.getLongitude() - 0.0001,
+                    coordinates.getLongitude() + 0.0001)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Coordenadas não encontradas"));
+        }
+
+        // Garante que a instância persistida seja usada
+        user.setCoordinates(coordinates);
+    }
+
+    // Codifica a senha antes de salvar o usuário
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+    // Agora salva o usuário com coordenadas válidas (salvas ou já existentes)
+    User savedUser = repository.save(user);
+
+    return ResponseEntity.status(201).body(new UserResponse(savedUser.getId(), savedUser.getName(), savedUser.getEmail()));
+}
 
     // READ: Listar todos os usuários
     @GetMapping
