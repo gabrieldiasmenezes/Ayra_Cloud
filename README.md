@@ -85,7 +85,67 @@ Sempre que um novo `commit` é enviado para a branch principal, um pipeline é e
 - O vídeo de demonstração mostra a aplicação em funcionamento real na nuvem.
 
 ---
+## 📡EndPoints por Entidades
 
+### **🧍‍♂️ User**
+
+| Método | Endpoint          | Descrição                 |
+| ------ | ----------------- | ------------------------- |
+| GET    | `/user`      | Retorna todos os usuários |
+| GET    | `/user/{id}` | Retorna um usuário por ID |
+| POST   | `/user`      | Cria um novo usuário      |
+| PUT    | `/user/{id}` | Atualiza um usuário       |
+| DELETE | `/user/{id}` | Deleta um usuário         |
+
+
+### **🌍 Coordinate**
+
+| Método | Endpoint                | Descrição                         |
+| ------ | ----------------------- | --------------------------------- |
+| GET    | `/coordinates`      | Retorna todas as coordenadas      |
+
+### **🗺️ Map Marker**
+
+| Método | Endpoint               | Descrição                           |
+| ------ | ---------------------- | ----------------------------------- |
+| GET    | `/map-marker`      | Retorna todos os marcadores do mapa |
+| GET    | `/map-marker/{id}` | Retorna um marcador específico      |       |
+
+### **🚨 Alert**
+
+| Método | Endpoint           | Descrição                    |
+| ------ | ------------------ | ---------------------------- |
+| GET    | `/alert`      | Retorna todos os alertas     |
+
+### **🛣️ Safe Route**
+
+| Método | Endpoint               | Descrição                      |
+| ------ | ---------------------- | ------------------------------ |
+| GET    | `/safe-routes`      | Retorna todas as rotas seguras |
+| GETBYALERTID    | `/safe-routes/by-alert/{id_alert}` | Retorna rotas especificas de um alerta        |
+
+### **🏠 Safe Location**
+
+| Método | Endpoint                  | Descrição                          |
+| ------ | ------------------------- | ---------------------------------- |
+| GET    | `/safe-location`      | Retorna todos os locais seguros    |
+| GETBYALERTID | `/safe-location/by-alert/{id_alert}` | Retorna locais seguros específicos de um alerta |
+
+### **💡 Safe Tip**
+
+| Método | Endpoint             | Descrição                           |
+| ------ | -------------------- | ----------------------------------- |
+| GET    | `/safe-tip`      | Retorna todas as dicas de segurança |
+| GETBYALERTID    | ` /safe-tip/by-alert/{id_alert} ` | Retorna dicas específicas de um alerta       |
+---
+
+### **📌 Testes da API – JSONs**
+
+| Entidade              | Método | Endpoint                 | Exemplo de JSON (POST)                                                                                                                                                                                                                                                             |
+| --------------------- | ------ | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **User**              | POST   | `/user`             | `{"name": "Isabela Santos","email": "isabela.santos@exemplo.com","password": "senhaForte456","phone": "11987654321","coordinates": {"latitude": -23.560520,"longitude": -46.643308,"dateCoordinate": "2025-06-02"}}
+`   
+|
 ## 📽️ Vídeo de Demonstração
 
 O vídeo demonstrando a etapa de cloud, com deploy e testes funcionais, pode ser acessado neste link:
