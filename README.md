@@ -143,9 +143,7 @@ Sempre que um novo `commit` é enviado para a branch principal, um pipeline é e
 
 | Entidade              | Método | Endpoint                 | Exemplo de JSON (POST)                                                                                                                                                                                                                                                             |
 | --------------------- | ------ | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **User**              | POST   | `/user`             | `{"name": "Isabela Santos","email": "isabela.santos@exemplo.com","password": "senhaForte456","phone": "11987654321","coordinates": {"latitude": -23.560520,"longitude": -46.643308,"dateCoordinate": "2025-06-02"}}
-`   
-|
+| **User**              | POST   | `/user`             | `{"name": "Isabela Santos","email": "isabela.santos@exemplo.com","password": "senhaForte456","phone": "11987654321","coordinates": {"latitude": -23.560520,"longitude": -46.643308,"dateCoordinate": "2025-06-02"}} `   |
 ## 📽️ Vídeo de Demonstração
 
 O vídeo demonstrando a etapa de cloud, com deploy e testes funcionais, pode ser acessado neste link:
